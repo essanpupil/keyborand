@@ -27,6 +27,33 @@
         android:layout_marginTop="16dp"
         android:text="Select Qbot Keyboard" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Keyboard Layout:"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/rg_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_qwerty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QWERTY"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rb_numeric"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NUMERIC" />
+    </RadioGroup>
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
