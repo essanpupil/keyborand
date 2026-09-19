@@ -11,6 +11,7 @@ import android.widget.Button
 import android.view.ViewGroup
 import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
+import androidx.core.content.edit
 
 class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -56,7 +57,7 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
             R.id.btn_n to Triple("N", "\"", "\""),
             R.id.btn_m to Triple("M", "_", "·"),
             R.id.btn_mode_switch to Triple(getString(R.string.key_mode_numeric), getString(R.string.key_mode_alpha), getString(R.string.key_mode_alpha)),
-            R.id.btn_layout_toggle to Triple(getString(R.string.key_pin), getString(R.string.key_pin), getString(R.string.key_pin))
+            R.id.btn_layout_toggle to Triple(getString(R.string.key_pin), getString(R.string.key_pin), getString(R.string.key_pin)),
         )
     }
 
@@ -96,7 +97,8 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
             val inputType = it.inputType
             if (when (inputType and EditorInfo.TYPE_MASK_CLASS) {
                 EditorInfo.TYPE_CLASS_NUMBER,
-                EditorInfo.TYPE_CLASS_PHONE -> true
+                EditorInfo.TYPE_CLASS_PHONE,
+                -> true
                 else -> false
             }) {
                 shouldBeNumeric = true
@@ -118,14 +120,16 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
 
     private fun setupKeyboard(viewGroup: ViewGroup) {
         for (i in 0 until viewGroup.childCount) {
-            val child = viewGroup.getChildAt(i)
-            if (child is Button) {
-                child.setOnClickListener {
-                    it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
-                    handleKeyPress(child)
+            when (val child = viewGroup.getChildAt(i)) {
+                is Button -> {
+                    child.setOnClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+                        handleKeyPress(child)
+                    }
                 }
-            } else if (child is ViewGroup) {
-                setupKeyboard(child)
+                is ViewGroup -> {
+                    setupKeyboard(child)
+                }
             }
         }
     }
@@ -139,17 +143,19 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
         val keyAlpha = getString(R.string.key_mode_alpha)
 
         when {
-            id == R.id.btn_del || text == keyDel -> {
+            (id == R.id.btn_del) || (text == keyDel) -> {
                 ic.deleteSurroundingText(1, 0)
             }
             text == getString(R.string.key_space) -> {
                 ic.commitText(" ", 1)
             }
-            id == R.id.btn_enter || text == getString(R.string.key_enter) -> {
+            (id == R.id.btn_enter) || (text == getString(R.string.key_enter)) -> {
                 ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
             }
             text == keyAlpha -> {
-                sharedPref.edit().putString("layout", "QWERTY").apply()
+                sharedPref.edit {
+                    putString("layout", "QWERTY")
+                }
                 isForcedNumeric = false
                 isNumericMode = false
                 isSymbolsMode = false
@@ -177,7 +183,9 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
                 updateKeyboardLabels()
             }
             id == R.id.btn_layout_toggle -> {
-                sharedPref.edit().putString("layout", "NUMERIC").apply()
+                sharedPref.edit {
+                    putString("layout", "NUMERIC")
+                }
                 setInputView(inflateLayout(R.layout.numeric_keyboard_view))
             }
             id == R.id.btn_randomize -> {
@@ -214,15 +222,18 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
     private fun updateNumericButtons(viewGroup: ViewGroup, digits: List<String>) {
         var currentDigitIndex = 0
         fun traverse(view: View) {
-            if (view is Button) {
-                val text = view.text?.toString() ?: ""
-                if (text.length == 1 && text[0].isDigit() && currentDigitIndex < digits.size) {
-                    view.text = digits[currentDigitIndex]
-                    currentDigitIndex++
+            when (view) {
+                is Button -> {
+                    val text = view.text?.toString() ?: ""
+                    if ((text.length == 1) && text[0].isDigit() && (currentDigitIndex < digits.size)) {
+                        view.text = digits[currentDigitIndex]
+                        currentDigitIndex++
+                    }
                 }
-            } else if (view is ViewGroup) {
-                for (i in 0 until view.childCount) {
-                    traverse(view.getChildAt(i))
+                is ViewGroup -> {
+                    for (i in 0 until view.childCount) {
+                        traverse(view.getChildAt(i))
+                    }
                 }
             }
         }
@@ -238,23 +249,25 @@ class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPrefer
     private fun updateAlphaButtonText(viewGroup: ViewGroup) {
         val mapping = getKeyMapping()
         for (i in 0 until viewGroup.childCount) {
-            val child = viewGroup.getChildAt(i)
-            if (child is Button) {
-                val keyMap = mapping[child.id]
-                if (keyMap != null) {
-                    val baseText = when {
-                        isSymbolsMode -> keyMap.third
-                        isNumericMode -> keyMap.second
-                        else -> keyMap.first
-                    }
-                    child.text = if (!isNumericMode && !isSymbolsMode && baseText.length == 1) {
-                        if (isCaps) baseText.uppercase() else baseText.lowercase()
-                    } else {
-                        baseText
+            when (val child = viewGroup.getChildAt(i)) {
+                is Button -> {
+                    val keyMap = mapping[child.id]
+                    if (keyMap != null) {
+                        val baseText = when {
+                            isSymbolsMode -> keyMap.third
+                            isNumericMode -> keyMap.second
+                            else -> keyMap.first
+                        }
+                        child.text = if (!isNumericMode && !isSymbolsMode && (baseText.length == 1)) {
+                            if (isCaps) baseText.uppercase() else baseText.lowercase()
+                        } else {
+                            baseText
+                        }
                     }
                 }
-            } else if (child is ViewGroup) {
-                updateAlphaButtonText(child)
+                is ViewGroup -> {
+                    updateAlphaButtonText(child)
+                }
             }
         }
     }
