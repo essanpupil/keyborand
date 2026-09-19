@@ -46,7 +46,8 @@ class MyKeyboardService : InputMethodService() {
             R.id.btn_n to Triple("N", "\"", "\""),
             R.id.btn_m to Triple("M", "_", "·"),
             R.id.btn_mode_switch to Triple("123", "ABC", "ABC"),
-            R.id.btn_layout_toggle to Triple("pin", "pin", "pin")
+            R.id.btn_layout_toggle to Triple("pin", "pin", "pin"),
+            R.id.btn_reset to Triple("RESET", "RESET", "RESET")
         )
     }
 
@@ -150,6 +151,9 @@ class MyKeyboardService : InputMethodService() {
             id == R.id.btn_randomize -> {
                 randomizeNumericKeyboard()
             }
+            id == R.id.btn_reset -> {
+                resetNumericKeyboard()
+            }
             else -> {
                 val code = if (isNumeric || isSymbols || isForcedNumeric) text else {
                     if (isCaps) text.uppercase() else text.lowercase()
@@ -162,6 +166,12 @@ class MyKeyboardService : InputMethodService() {
     private fun randomizeNumericKeyboard() {
         val root = keyboardRoot ?: return
         val digits = (0..9).map { it.toString() }.shuffled()
+        updateNumericButtons(root, digits)
+    }
+
+    private fun resetNumericKeyboard() {
+        val root = keyboardRoot ?: return
+        val digits = (1..9).map { it.toString() } + "0"
         updateNumericButtons(root, digits)
     }
 
