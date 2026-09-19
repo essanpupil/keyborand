@@ -4,60 +4,74 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="24dp"
+    android:background="@color/kb_background">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to Qbot Keyboard!"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:text="@string/welcome_message"
+        android:textColor="@color/key_text_color"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:gravity="center" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_enable_kb"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Enable Keyboard in Settings" />
+        android:layout_marginTop="48dp"
+        android:text="@string/enable_kb_settings" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_select_kb"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Select Qbot Keyboard" />
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:text="@string/select_kb_active" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Keyboard Layout:"
+        android:layout_marginTop="48dp"
+        android:text="@string/keyboard_layout_label"
+        android:textColor="@color/key_text_color"
         android:textStyle="bold" />
 
     <RadioGroup
         android:id="@+id/rg_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal">
 
         <RadioButton
             android:id="@+id/rb_qwerty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="QWERTY"
+            android:text="@string/layout_qwerty"
             android:checked="true" />
 
         <RadioButton
             android:id="@+id/rb_numeric"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NUMERIC" />
+            android:layout_marginStart="24dp"
+            android:text="@string/layout_numeric" />
     </RadioGroup>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:hint="Test your keyboard here" />
+        android:layout_marginTop="48dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/test_kb_hint"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>

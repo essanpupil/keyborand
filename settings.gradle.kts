@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Qbot"
+rootProject.name = "keyborand"
 include(":app")

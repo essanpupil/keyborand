@@ -1,3 +1,34 @@
 <resources>
-    <string name="app_name">Qbot</string>
+    <string name="app_name">Qbot Keyboard</string>
+
+    <!-- MainActivity -->
+    <string name="welcome_message">Welcome to Qbot Keyboard!</string>
+    <string name="enable_kb_settings">Enable Keyboard in Settings</string>
+    <string name="select_kb_active">Select Qbot Keyboard</string>
+    <string name="keyboard_layout_label">Keyboard Layout:</string>
+    <string name="layout_qwerty">QWERTY</string>
+    <string name="layout_numeric">NUMERIC</string>
+    <string name="test_kb_hint">Test your keyboard here</string>
+
+    <!-- Keyboard Special Keys -->
+    <string name="key_del">DEL</string>
+    <string name="key_enter">ENTER</string>
+    <string name="key_space">SPACE</string>
+    <string name="key_shift">SHIFT</string>
+    <string name="key_mode_numeric">123</string>
+    <string name="key_mode_alpha">ABC</string>
+    <string name="key_symbols">#+=</string>
+    <string name="key_ime">IME</string>
+    <string name="key_random">RANDOM</string>
+    <string name="key_reset">RESET</string>
+    <string name="key_pin">pin</string>
+
+    <!-- Accessibility -->
+    <string name="desc_delete">Delete character</string>
+    <string name="desc_enter">Enter</string>
+    <string name="desc_space">Space</string>
+    <string name="desc_shift">Shift</string>
+    <string name="desc_ime">Switch Input Method</string>
+    <string name="desc_random">Randomize numeric layout</string>
+    <string name="desc_reset">Reset numeric layout</string>
 </resources>
