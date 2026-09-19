@@ -4,47 +4,67 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#DDDDDD"
-    android:padding="8dp">
+    android:padding="4dp">
 
+    <!-- Row 1 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Q" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="E" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="R" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Y" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Q" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="W" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="E" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="R" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="T" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Y" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="U" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="I" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="O" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="P" style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
+    <!-- Row 2 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="A" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="D" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="F" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="G" />
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="A" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="S" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="D" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="F" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="G" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="H" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="J" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="K" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="L" style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
+    <!-- Row 3 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.5" android:text="DEL" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Z" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="X" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="C" />
-        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.5" android:text="ENTER" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.5" android:text="SHIFT" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="Z" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="X" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="C" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="V" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="B" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="N" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="M" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1.5" android:text="DEL" style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
+    <!-- Row 4 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <Button android:layout_width="match_parent" android:layout_height="wrap_content" android:text="SPACE" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:text="123" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="5" android:text="SPACE" style="?android:attr/buttonBarButtonStyle" />
+        <Button android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="2" android:text="ENTER" style="?android:attr/buttonBarButtonStyle" />
     </LinearLayout>
 
 </LinearLayout>
