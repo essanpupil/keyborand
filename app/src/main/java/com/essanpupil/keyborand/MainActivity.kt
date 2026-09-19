@@ -1,4 +1,4 @@
-package com.example.keyborand
+package com.essanpupil.keyborand
 
 import android.content.Intent
 import android.os.Bundle

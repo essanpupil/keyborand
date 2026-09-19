@@ -1,4 +1,4 @@
-package com.example.keyborand
+package com.essanpupil.keyborand
 
 import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
