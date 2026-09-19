@@ -278,8 +278,16 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="5"
+            android:layout_weight="3.5"
             android:text="SPACE" />
+
+        <Button
+            android:id="@+id/btn_layout_toggle"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="pin" />
 
         <Button
             android:id="@+id/btn_enter"
