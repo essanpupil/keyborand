@@ -1,4 +1,4 @@
-package com.example.qbot
+package com.example.keyborand
 
 import org.junit.Test
 

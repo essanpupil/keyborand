@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.qbot"
+    namespace = "com.example.keyborand"
     compileSdk {
         version = release(37)
     }
