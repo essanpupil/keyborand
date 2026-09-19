@@ -50,6 +50,7 @@ class MyKeyboardService : InputMethodService() {
         val keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as ViewGroup
         keyboardRoot = keyboardView
         setupKeyboard(keyboardView)
+        updateKeyboard()
         return keyboardView
     }
 
@@ -58,7 +59,7 @@ class MyKeyboardService : InputMethodService() {
             val child = viewGroup.getChildAt(i)
             if (child is Button) {
                 child.setOnClickListener {
-                    handleKeyPress(child as Button)
+                    handleKeyPress(child)
                 }
             } else if (child is ViewGroup) {
                 setupKeyboard(child)
