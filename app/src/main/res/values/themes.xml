@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Qbot" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.Qbot" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -12,5 +12,23 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    </style>
+
+    <style name="KeyboardKeyStyle" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_margin">2dp</item>
+        <item name="android:background">@color/key_background</item>
+        <item name="android:textColor">@color/key_text_color</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
+    <style name="SpecialKeyStyle" parent="KeyboardKeyStyle">
+        <item name="android:background">@color/key_background_special</item>
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

@@ -1,21 +1,30 @@
 package com.example.qbot
 
+import android.content.SharedPreferences
 import android.inputmethodservice.InputMethodService
+import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.view.ViewGroup
+import android.view.ContextThemeWrapper
+import android.view.LayoutInflater
 
-class MyKeyboardService : InputMethodService() {
+class MyKeyboardService : InputMethodService(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var isCaps = false
-    private var isNumeric = false
-    private var isSymbols = false
-    private var isForcedNumeric = false
+    private var isNumericMode = false // 123 button toggle
+    private var isSymbolsMode = false // #+= button toggle
+    private var isForcedNumeric = false // Based on inputType
+    
     private var keyboardRoot: ViewGroup? = null
     private var currentLayoutResId: Int = -1
+
+    private val sharedPref by lazy {
+        getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
+    }
 
     private fun getKeyMapping(): Map<Int, Triple<String, String, String>> {
         return mapOf(
@@ -38,7 +47,7 @@ class MyKeyboardService : InputMethodService() {
             R.id.btn_j to Triple("J", "$", "€"),
             R.id.btn_k to Triple("K", "&", "£"),
             R.id.btn_l to Triple("L", "@", "¥"),
-            R.id.btn_shift to Triple("SHIFT", "#+=", "123"),
+            R.id.btn_shift to Triple(getString(R.string.key_shift), getString(R.string.key_symbols), getString(R.string.key_mode_numeric)),
             R.id.btn_z to Triple("Z", ".", "."),
             R.id.btn_x to Triple("X", ",", ","),
             R.id.btn_c to Triple("C", "?", "?"),
@@ -46,36 +55,43 @@ class MyKeyboardService : InputMethodService() {
             R.id.btn_b to Triple("B", "'", "'"),
             R.id.btn_n to Triple("N", "\"", "\""),
             R.id.btn_m to Triple("M", "_", "·"),
-            R.id.btn_mode_switch to Triple("123", "ABC", "ABC"),
-            R.id.btn_layout_toggle to Triple("pin", "pin", "pin"),
-            R.id.btn_reset to Triple("RESET", "RESET", "RESET"),
-            R.id.btn_switch_ime to Triple("IME", "IME", "IME")
+            R.id.btn_mode_switch to Triple(getString(R.string.key_mode_numeric), getString(R.string.key_mode_alpha), getString(R.string.key_mode_alpha)),
+            R.id.btn_layout_toggle to Triple(getString(R.string.key_pin), getString(R.string.key_pin), getString(R.string.key_pin))
         )
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        sharedPref.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onDestroy() {
+        sharedPref.unregisterOnSharedPreferenceChangeListener(this)
+        super.onDestroy()
+    }
+
     override fun onCreateInputView(): View {
-        val sharedPref = getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
         val layout = sharedPref.getString("layout", "QWERTY")
         val layoutRes = if (layout == "NUMERIC") R.layout.numeric_keyboard_view else R.layout.keyboard_view
         return inflateLayout(layoutRes)
     }
 
     private fun inflateLayout(layoutResId: Int): View {
-        val view = layoutInflater.inflate(layoutResId, null) as ViewGroup
+        val themedContext = ContextThemeWrapper(this, R.style.Theme_Qbot)
+        val view = LayoutInflater.from(themedContext).inflate(layoutResId, null) as ViewGroup
         keyboardRoot = view
         currentLayoutResId = layoutResId
         setupKeyboard(view)
-        updateKeyboard()
+        updateKeyboardLabels()
         return view
     }
 
     override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
         super.onStartInputView(info, restarting)
         
-        val sharedPref = getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
         val preferredLayout = sharedPref.getString("layout", "QWERTY")
-
         var shouldBeNumeric = preferredLayout == "NUMERIC"
+        
         info?.let {
             val inputType = it.inputType
             if (when (inputType and EditorInfo.TYPE_MASK_CLASS) {
@@ -93,10 +109,10 @@ class MyKeyboardService : InputMethodService() {
         if (currentLayoutResId != targetLayout) {
             setInputView(inflateLayout(targetLayout))
         } else {
-            isNumeric = isForcedNumeric
-            isSymbols = false
+            isNumericMode = isForcedNumeric
+            isSymbolsMode = false
             isCaps = false
-            updateKeyboard()
+            updateKeyboardLabels()
         }
     }
 
@@ -105,6 +121,7 @@ class MyKeyboardService : InputMethodService() {
             val child = viewGroup.getChildAt(i)
             if (child is Button) {
                 child.setOnClickListener {
+                    it.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
                     handleKeyPress(child)
                 }
             } else if (child is ViewGroup) {
@@ -115,44 +132,51 @@ class MyKeyboardService : InputMethodService() {
 
     private fun handleKeyPress(button: Button) {
         val ic = currentInputConnection ?: return
-        val text = button.text.toString()
+        val text = button.text?.toString() ?: ""
         val id = button.id
 
+        val keyDel = getString(R.string.key_del)
+        val keyAlpha = getString(R.string.key_mode_alpha)
+
         when {
-            text == "DEL" -> ic.deleteSurroundingText(1, 0)
-            text == "SPACE" -> ic.commitText(" ", 1)
-            text == "ENTER" -> ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
-            text == "ABC" -> {
-                val sharedPref = getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
+            id == R.id.btn_del || text == keyDel -> {
+                ic.deleteSurroundingText(1, 0)
+            }
+            text == getString(R.string.key_space) -> {
+                ic.commitText(" ", 1)
+            }
+            id == R.id.btn_enter || text == getString(R.string.key_enter) -> {
+                ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+            }
+            text == keyAlpha -> {
                 sharedPref.edit().putString("layout", "QWERTY").apply()
                 isForcedNumeric = false
-                isNumeric = false
-                isSymbols = false
+                isNumericMode = false
+                isSymbolsMode = false
                 if (currentLayoutResId != R.layout.keyboard_view) {
                     setInputView(inflateLayout(R.layout.keyboard_view))
                 } else {
-                    updateKeyboard()
+                    updateKeyboardLabels()
                 }
             }
             id == R.id.btn_shift -> {
-                if (!isNumeric && !isSymbols) {
+                if (!isNumericMode && !isSymbolsMode) {
                     isCaps = !isCaps
                 } else {
-                    isSymbols = !isSymbols
+                    isSymbolsMode = !isSymbolsMode
                 }
-                updateKeyboard()
+                updateKeyboardLabels()
             }
             id == R.id.btn_mode_switch -> {
-                if (isNumeric || isSymbols) {
-                    isNumeric = false
-                    isSymbols = false
+                if (isNumericMode || isSymbolsMode) {
+                    isNumericMode = false
+                    isSymbolsMode = false
                 } else {
-                    isNumeric = true
+                    isNumericMode = true
                 }
-                updateKeyboard()
+                updateKeyboardLabels()
             }
             id == R.id.btn_layout_toggle -> {
-                val sharedPref = getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
                 sharedPref.edit().putString("layout", "NUMERIC").apply()
                 setInputView(inflateLayout(R.layout.numeric_keyboard_view))
             }
@@ -167,7 +191,7 @@ class MyKeyboardService : InputMethodService() {
                 imm.showInputMethodPicker()
             }
             else -> {
-                val code = if (isNumeric || isSymbols || isForcedNumeric) text else {
+                val code = if (isNumericMode || isSymbolsMode || isForcedNumeric) text else {
                     if (isCaps) text.uppercase() else text.lowercase()
                 }
                 ic.commitText(code, 1)
@@ -191,7 +215,7 @@ class MyKeyboardService : InputMethodService() {
         var currentDigitIndex = 0
         fun traverse(view: View) {
             if (view is Button) {
-                val text = view.text.toString()
+                val text = view.text?.toString() ?: ""
                 if (text.length == 1 && text[0].isDigit() && currentDigitIndex < digits.size) {
                     view.text = digits[currentDigitIndex]
                     currentDigitIndex++
@@ -205,13 +229,13 @@ class MyKeyboardService : InputMethodService() {
         traverse(viewGroup)
     }
 
-    private fun updateKeyboard() {
+    private fun updateKeyboardLabels() {
         if (currentLayoutResId == R.layout.keyboard_view) {
-            keyboardRoot?.let { updateButtonText(it) }
+            keyboardRoot?.let { updateAlphaButtonText(it) }
         }
     }
 
-    private fun updateButtonText(viewGroup: ViewGroup) {
+    private fun updateAlphaButtonText(viewGroup: ViewGroup) {
         val mapping = getKeyMapping()
         for (i in 0 until viewGroup.childCount) {
             val child = viewGroup.getChildAt(i)
@@ -219,18 +243,28 @@ class MyKeyboardService : InputMethodService() {
                 val keyMap = mapping[child.id]
                 if (keyMap != null) {
                     val baseText = when {
-                        isSymbols -> keyMap.third
-                        isNumeric -> keyMap.second
+                        isSymbolsMode -> keyMap.third
+                        isNumericMode -> keyMap.second
                         else -> keyMap.first
                     }
-                    child.text = if (!isNumeric && !isSymbols && baseText.length == 1) {
+                    child.text = if (!isNumericMode && !isSymbolsMode && baseText.length == 1) {
                         if (isCaps) baseText.uppercase() else baseText.lowercase()
                     } else {
                         baseText
                     }
                 }
             } else if (child is ViewGroup) {
-                updateButtonText(child)
+                updateAlphaButtonText(child)
+            }
+        }
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == "layout") {
+            val layout = sharedPref.getString("layout", "QWERTY")
+            val layoutRes = if (layout == "NUMERIC") R.layout.numeric_keyboard_view else R.layout.keyboard_view
+            if (currentLayoutResId != layoutRes) {
+                setInputView(inflateLayout(layoutRes))
             }
         }
     }

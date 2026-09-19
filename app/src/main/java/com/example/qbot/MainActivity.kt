@@ -5,10 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,15 +26,17 @@ class MainActivity : AppCompatActivity() {
 
         rgLayout.setOnCheckedChangeListener { _, checkedId ->
             val layout = if (checkedId == R.id.rb_numeric) "NUMERIC" else "QWERTY"
-            sharedPref.edit().putString("layout", layout).apply()
+            sharedPref.edit {
+                putString("layout", layout)
+            }
         }
 
-        findViewById<Button>(R.id.btn_enable_kb).setOnClickListener {
+        findViewById<MaterialButton>(R.id.btn_enable_kb).setOnClickListener {
             val intent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
             startActivity(intent)
         }
 
-        findViewById<Button>(R.id.btn_select_kb).setOnClickListener {
+        findViewById<MaterialButton>(R.id.btn_select_kb).setOnClickListener {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showInputMethodPicker()
         }
