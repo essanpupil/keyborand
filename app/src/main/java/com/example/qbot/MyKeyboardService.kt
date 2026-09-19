@@ -126,7 +126,13 @@ class MyKeyboardService : InputMethodService() {
                 val sharedPref = getSharedPreferences("KeyboardSettings", MODE_PRIVATE)
                 sharedPref.edit().putString("layout", "QWERTY").apply()
                 isForcedNumeric = false
-                setInputView(inflateLayout(R.layout.keyboard_view))
+                isNumeric = false
+                isSymbols = false
+                if (currentLayoutResId != R.layout.keyboard_view) {
+                    setInputView(inflateLayout(R.layout.keyboard_view))
+                } else {
+                    updateKeyboard()
+                }
             }
             id == R.id.btn_shift -> {
                 if (!isNumeric && !isSymbols) {
