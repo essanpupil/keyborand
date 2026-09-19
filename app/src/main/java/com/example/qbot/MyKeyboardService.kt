@@ -147,6 +147,9 @@ class MyKeyboardService : InputMethodService() {
                 sharedPref.edit().putString("layout", "NUMERIC").apply()
                 setInputView(inflateLayout(R.layout.numeric_keyboard_view))
             }
+            id == R.id.btn_randomize -> {
+                randomizeNumericKeyboard()
+            }
             else -> {
                 val code = if (isNumeric || isSymbols || isForcedNumeric) text else {
                     if (isCaps) text.uppercase() else text.lowercase()
@@ -154,6 +157,30 @@ class MyKeyboardService : InputMethodService() {
                 ic.commitText(code, 1)
             }
         }
+    }
+
+    private fun randomizeNumericKeyboard() {
+        val root = keyboardRoot ?: return
+        val digits = (0..9).map { it.toString() }.shuffled()
+        updateNumericButtons(root, digits)
+    }
+
+    private fun updateNumericButtons(viewGroup: ViewGroup, digits: List<String>) {
+        var currentDigitIndex = 0
+        fun traverse(view: View) {
+            if (view is Button) {
+                val text = view.text.toString()
+                if (text.length == 1 && text[0].isDigit() && currentDigitIndex < digits.size) {
+                    view.text = digits[currentDigitIndex]
+                    currentDigitIndex++
+                }
+            } else if (view is ViewGroup) {
+                for (i in 0 until view.childCount) {
+                    traverse(view.getChildAt(i))
+                }
+            }
+        }
+        traverse(viewGroup)
     }
 
     private fun updateKeyboard() {
