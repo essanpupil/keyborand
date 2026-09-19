@@ -290,6 +290,14 @@
             android:text="pin" />
 
         <Button
+            android:id="@+id/btn_switch_ime"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:text="IME" />
+
+        <Button
             android:id="@+id/btn_enter"
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
