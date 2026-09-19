@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button android:id="@+id/btn_switch_alpha" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:text="ABC" android:textSize="16sp" />
+        <Button android:id="@+id/btn_randomize" style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="1" android:text="RAND" android:textSize="14sp" />
         <Button style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp" android:layout_height="60dp" android:layout_weight="2" android:text="ENTER" android:textSize="16sp" />
     </LinearLayout>
 
