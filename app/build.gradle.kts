@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.qbot"
+        applicationId = "com.example.keyborand"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
