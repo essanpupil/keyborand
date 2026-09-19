@@ -5,13 +5,16 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.Button
 import android.view.ViewGroup
-import android.widget.LinearLayout
 
 class MyKeyboardService : InputMethodService() {
 
+    private var isCaps = false
+    private var keyboardRoot: ViewGroup? = null
+
     override fun onCreateInputView(): View {
-        val keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null)
-        setupKeyboard(keyboardView as ViewGroup)
+        val keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as ViewGroup
+        keyboardRoot = keyboardView
+        setupKeyboard(keyboardView)
         return keyboardView
     }
 
@@ -30,7 +33,8 @@ class MyKeyboardService : InputMethodService() {
 
     private fun handleKeyPress(button: Button) {
         val ic = currentInputConnection ?: return
-        when (val text = button.text.toString()) {
+        val text = button.text.toString()
+        when (text) {
             "DEL" -> {
                 ic.deleteSurroundingText(1, 0)
             }
@@ -40,8 +44,34 @@ class MyKeyboardService : InputMethodService() {
             "ENTER" -> {
                 ic.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
             }
+            "SHIFT" -> {
+                isCaps = !isCaps
+                updateKeyboard()
+            }
+            "123" -> {
+                // Handle numbers mode switch if implemented
+            }
             else -> {
-                ic.commitText(text, 1)
+                val code = if (isCaps) text.uppercase() else text.lowercase()
+                ic.commitText(code, 1)
+            }
+        }
+    }
+
+    private fun updateKeyboard() {
+        keyboardRoot?.let { updateButtonText(it) }
+    }
+
+    private fun updateButtonText(viewGroup: ViewGroup) {
+        for (i in 0 until viewGroup.childCount) {
+            val child = viewGroup.getChildAt(i)
+            if (child is Button) {
+                val text = child.text.toString()
+                if (text.length == 1) {
+                    child.text = if (isCaps) text.uppercase() else text.lowercase()
+                }
+            } else if (child is ViewGroup) {
+                updateButtonText(child)
             }
         }
     }
