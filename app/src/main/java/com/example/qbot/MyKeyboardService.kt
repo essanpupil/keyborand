@@ -4,6 +4,7 @@ import android.inputmethodservice.InputMethodService
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.view.ViewGroup
 
@@ -47,7 +48,8 @@ class MyKeyboardService : InputMethodService() {
             R.id.btn_m to Triple("M", "_", "·"),
             R.id.btn_mode_switch to Triple("123", "ABC", "ABC"),
             R.id.btn_layout_toggle to Triple("pin", "pin", "pin"),
-            R.id.btn_reset to Triple("RESET", "RESET", "RESET")
+            R.id.btn_reset to Triple("RESET", "RESET", "RESET"),
+            R.id.btn_switch_ime to Triple("IME", "IME", "IME")
         )
     }
 
@@ -153,6 +155,10 @@ class MyKeyboardService : InputMethodService() {
             }
             id == R.id.btn_reset -> {
                 resetNumericKeyboard()
+            }
+            id == R.id.btn_switch_ime -> {
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showInputMethodPicker()
             }
             else -> {
                 val code = if (isNumeric || isSymbols || isForcedNumeric) text else {
